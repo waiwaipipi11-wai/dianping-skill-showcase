@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/c1-alibaba-puhui-ti/index.css">
+<title>点评商户详情页 Skill · 设计规范提取与页面骨架标准化</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg-card: #131313;
+  --bg-elevated: #1a1a1a;
+  --accent: #FF5F0F;
+  --accent-glow: rgba(255, 95, 15, 0.4);
+  --accent-soft: rgba(255, 95, 15, 0.08);
+  --text: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-tertiary: rgba(255, 255, 255, 0.35);
+  --border: rgba(255, 255, 255, 0.08);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+}
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'AlibabaPuHuiTi', 'Alibaba PuHuiTi', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+img { display: block; max-width: 100%; }
+
+/* Scroll Progress */
+.scroll-progress {
+  position: fixed; top: 0; left: 0;
+  width: 0%; height: 3px;
+  background: linear-gradient(90deg, var(--accent), #ff8c42, var(--accent));
+  z-index: 9998;
+  box-shadow: 0 0 10px var(--accent-glow);
+  transition: width 0.1s linear;
+}
+
+/* Navigation */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 48px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: padding 0.3s var(--ease-out-expo);
+}
+.nav.scrolled { padding: 14px 48px; }
+
+.nav-brand {
+  font-size: 14px; font-weight: 700;
+  color: var(--text);
+  letter-spacing: 1px;
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-brand-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.nav-links { display: flex; gap: 32px; }
+.nav-link {
+  font-size: 13px; color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s;
+  letter-spacing: 0.5px;
+}
+.nav-link:hover { color: var(--accent); }
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative;
+  padding: 120px 48px 80px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255, 95, 15, 0.12), transparent 60%);
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+}
+
+.hero-tag {
+  font-size: 13px; color: var(--accent);
+  letter-spacing: 4px; text-transform: uppercase;
+  margin-bottom: 24px;
+  font-weight: 700;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.2s forwards;
+}
+
+.hero-title {
+  font-size: clamp(36px, 7vw, 80px);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 24px;
+  max-width: 900px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.4s forwards;
+}
+
+.hero-title .accent { color: var(--accent); }
+
+.hero-subtitle {
+  font-size: clamp(15px, 2vw, 20px);
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin-bottom: 48px;
+  line-height: 1.7;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.6s forwards;
+}
+
+.hero-metrics {
+  display: flex; gap: 48px;
+  flex-wrap: wrap; justify-content: center;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.8s forwards;
+}
+
+.hero-metric { text-align: center; }
+.hero-metric-num {
+  font-size: 42px; font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 6px;
+  font-family: 'AlibabaPuHuiTi', sans-serif;
+}
+.hero-metric-label {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  letter-spacing: 1px;
+}
+
+.hero-scroll {
+  position: absolute; bottom: 40px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px; color: var(--text-tertiary);
+  letter-spacing: 2px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 1s forwards;
+}
+.hero-scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+/* Tags */
+.tags {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  justify-content: center; margin-top: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s var(--ease-out-expo) 0.9s forwards;
+}
+.tag {
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  background: var(--bg-card);
+  transition: all 0.3s var(--ease-out-expo);
+}
+.tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Section */
+.section {
+  padding: 100px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  margin-bottom: 64px;
+  text-align: center;
+}
+
+.section-num {
+  font-size: 13px; color: var(--accent);
+  letter-spacing: 3px; text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.section-desc {
+  font-size: 16px;
+  color: var(--text-secondary);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* Overview Cards */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.overview-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+.overview-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.overview-card:hover {
+  border-color: rgba(255, 95, 15, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.overview-card:hover::before { opacity: 1; }
+
+.overview-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+  font-size: 22px; font-weight: 900;
+  color: var(--accent);
+}
+
+.overview-card h3 {
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.overview-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Gallery */
+.gallery {
+  display: flex; flex-direction: column;
+  gap: 80px;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  transition: all 0.5s var(--ease-out-expo);
+}
+
+.gallery-item:hover {
+  border-color: rgba(255, 95, 15, 0.2);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+}
+
+.gallery-item-header {
+  padding: 24px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.gallery-item-num {
+  font-size: 13px; font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 2px;
+}
+
+.gallery-item-title {
+  font-size: 16px; font-weight: 700;
+  color: var(--text);
+}
+
+.gallery-item-zoom {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  display: flex; align-items: center; gap: 6px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.gallery-item-zoom:hover { color: var(--accent); }
+
+.gallery-image-wrap {
+  overflow: hidden;
+  cursor: zoom-in;
+  position: relative;
+}
+
+.gallery-image-wrap img {
+  width: 100%;
+  transition: transform 0.8s var(--ease-out-expo);
+  transform-origin: center top;
+}
+
+.gallery-image-wrap:hover img {
+  transform: scale(1.02);
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 9999;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px 40px;
+  overflow-y: auto;
+  cursor: zoom-out;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.lightbox.active { display: flex; }
+.lightbox img {
+  max-width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.lightbox-close {
+  position: fixed; top: 24px; right: 32px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s;
+  z-index: 10000;
+}
+.lightbox-close:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Reveal Animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s var(--ease-out-expo), transform 0.8s var(--ease-out-expo);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Footer */
+footer {
+  padding: 60px 48px 40px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
+}
+.footer-brand {
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.footer-text {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  letter-spacing: 0.5px;
+}
+.footer-link {
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+.footer-link:hover { opacity: 0.8; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 20px 60px; }
+  .hero-metrics { gap: 24px; }
+  .hero-metric-num { font-size: 32px; }
+  .section { padding: 60px 20px; }
+  .gallery { gap: 48px; }
+  .gallery-item-header { padding: 16px 20px; }
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scrollLine {
+  0%, 100% { transform: scaleY(0.3); transform-origin: top; }
+  50% { transform: scaleY(1); transform-origin: top; }
+}
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+  <div class="nav-brand">
+    <span class="nav-brand-dot"></span>
+    点评商户详情页 Skill
+  </div>
+  <div class="nav-links">
+    <a href="#overview" class="nav-link">项目概述</a>
+    <a href="#gallery" class="nav-link">设计稿</a>
+    <a href="#about" class="nav-link">关于</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-tag">AI CODING · DESIGN SYSTEM</div>
+  <h1 class="hero-title">
+    点评商户详情页 <span class="accent">Skill</span>
+  </h1>
+  <p class="hero-subtitle">
+    围绕实体门店提供"感知→决策→转化"动线的消费型详情页，覆盖美食、景点两类业态。提取色彩基调、圆角体系、边距体系等设计规范，形成可复用的页面骨架 Skill。
+  </p>
+  <div class="tags">
+    <span class="tag">设计规范</span>
+    <span class="tag">页面骨架</span>
+    <span class="tag">多业态</span>
+    <span class="tag">AI 辅助</span>
+    <span class="tag">Skill</span>
+  </div>
+  <div class="hero-metrics">
+    <div class="hero-metric">
+      <div class="hero-metric-num">880+</div>
+      <div class="hero-metric-label">行规范</div>
+    </div>
+    <div class="hero-metric">
+      <div class="hero-metric-num">50+</div>
+      <div class="hero-metric-label">组件规则</div>
+    </div>
+    <div class="hero-metric">
+      <div class="hero-metric-num">2</div>
+      <div class="hero-metric-label">类业态覆盖</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>SCROLL</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- Overview -->
+<section class="section" id="overview">
+  <div class="section-header reveal">
+    <div class="section-num">01 / OVERVIEW</div>
+    <h2 class="section-title">项目概述</h2>
+    <p class="section-desc">
+      通过 AI 辅助设计规范提取与页面骨架标准化，将设计系统的核心要素转化为可复用的 Skill，实现设计到代码的高效协作。
+    </p>
+  </div>
+  <div class="overview-grid">
+    <div class="overview-card reveal">
+      <div class="overview-icon">01</div>
+      <h3>感知层规范</h3>
+      <p>提取色彩基调、字体层级、图标体系等视觉感知要素，建立统一的设计语言基础。</p>
+    </div>
+    <div class="overview-card reveal">
+      <div class="overview-icon">02</div>
+      <h3>决策层骨架</h3>
+      <p>定义圆角体系、边距体系、间距规则等结构性规范，形成页面骨架的标准模板。</p>
+    </div>
+    <div class="overview-card reveal">
+      <div class="overview-icon">03</div>
+      <h3>转化层组件</h3>
+      <p>沉淀 50+ 组件规则，覆盖美食、景点两类业态，支撑"感知→决策→转化"完整动线。</p>
+    </div>
+    <div class="overview-card reveal">
+      <div class="overview-icon">04</div>
+      <h3>Skill 化输出</h3>
+      <p>将设计规范转化为 880+ 行可执行 Skill，实现设计规范的代码化、自动化、可复用。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="section" id="gallery">
+  <div class="section-header reveal">
+    <div class="section-num">02 / DESIGN GALLERY</div>
+    <h2 class="section-title">设计稿展示</h2>
+    <p class="section-desc">
+      以下为 Figma 设计稿完整展示，点击图片可查看高清大图。
+    </p>
+  </div>
+  <div class="gallery">
+    <div class="gallery-item reveal">
+      <div class="gallery-item-header">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span class="gallery-item-num">01</span>
+          <span class="gallery-item-title">设计总览</span>
+        </div>
+        <span class="gallery-item-zoom">点击放大 ⤢</span>
+      </div>
+      <div class="gallery-image-wrap" data-img="images/1.png">
+        <img src="images/1.png" alt="点评商户详情页 Skill - 设计总览" loading="lazy" />
+      </div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-item-header">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span class="gallery-item-num">02</span>
+          <span class="gallery-item-title">规范体系</span>
+        </div>
+        <span class="gallery-item-zoom">点击放大 ⤢</span>
+      </div>
+      <div class="gallery-image-wrap" data-img="images/2.png">
+        <img src="images/2.png" alt="点评商户详情页 Skill - 规范体系" loading="lazy" />
+      </div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-item-header">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span class="gallery-item-num">03</span>
+          <span class="gallery-item-title">完整规范文档</span>
+        </div>
+        <span class="gallery-item-zoom">点击放大 ⤢</span>
+      </div>
+      <div class="gallery-image-wrap" data-img="images/3.png">
+        <img src="images/3.png" alt="点评商户详情页 Skill - 完整规范文档" loading="lazy" />
+      </div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-item-header">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span class="gallery-item-num">04</span>
+          <span class="gallery-item-title">业态覆盖</span>
+        </div>
+        <span class="gallery-item-zoom">点击放大 ⤢</span>
+      </div>
+      <div class="gallery-image-wrap" data-img="images/4.png">
+        <img src="images/4.png" alt="点评商户详情页 Skill - 业态覆盖" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="section" id="about">
+  <div class="section-header reveal">
+    <div class="section-num">03 / ABOUT</div>
+    <h2 class="section-title">关于项目</h2>
+    <p class="section-desc">
+      这是 AI Coding 实践的一部分，探索设计规范提取与页面骨架标准化的自动化路径。
+    </p>
+  </div>
+  <div class="overview-grid">
+    <div class="overview-card reveal">
+      <div class="overview-icon">AI</div>
+      <h3>AI 辅助提取</h3>
+      <p>利用 CatDesk AI 全局搜索与语义分析能力，从现有页面中自动提取设计规范要素。</p>
+    </div>
+    <div class="overview-card reveal">
+      <div class="overview-icon">SK</div>
+      <h3>Skill 化封装</h3>
+      <p>将提取的规范封装为可执行 Skill，支持设计稿到代码的自动化转换流程。</p>
+    </div>
+    <div class="overview-card reveal">
+      <div class="overview-icon">CO</div>
+      <h3>协作提效</h3>
+      <p>通过标准化页面骨架，降低设计与研发的沟通成本，提升多业态页面的产出效率。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p class="footer-brand">任悦平 · 点评商户详情页 Skill</p>
+  <p class="footer-text">
+    © 2026 All Rights Reserved · 
+    <a href="https://github.com/phuryn/pm-skills" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+  </p>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-close" id="lightboxClose">✕</div>
+  <img id="lightboxImg" src="" alt="" />
+</div>
+
+<script>
+// Scroll Progress
+const scrollProgress = document.getElementById('scrollProgress');
+const nav = document.getElementById('nav');
+
+window.addEventListener('scroll', () => {
+  const scrollTop = window.pageYOffset;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  scrollProgress.style.width = progress + '%';
+  
+  if (scrollTop > 60) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
+// Reveal Animation
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, index) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), index * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Lightbox
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxClose = document.getElementById('lightboxClose');
+
+document.querySelectorAll('.gallery-image-wrap').forEach(wrap => {
+  wrap.addEventListener('click', () => {
+    const src = wrap.dataset.img;
+    lightboxImg.src = src;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+function closeLightbox() {
+  lightbox.classList.remove('active');
+  document.body.style.overflow = '';
+  lightboxImg.src = '';
+}
+
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox || e.target === lightboxClose) closeLightbox();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeLightbox();
+});
+
+// Smooth scroll for nav links
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>
