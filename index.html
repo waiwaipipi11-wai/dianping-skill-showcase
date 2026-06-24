@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/c1-alibaba-puhui-ti/index.css">
-<title>点评商户详情页 Skill · 设计规范提取与页面骨架标准化</title>
+<title>点评 AI 生码设计规范 Skill · 三层资产体系</title>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -15,6 +15,8 @@
   --accent: #FF5F0F;
   --accent-glow: rgba(255, 95, 15, 0.4);
   --accent-soft: rgba(255, 95, 15, 0.08);
+  --cyan: #06b6d4;
+  --cyan-soft: rgba(6, 182, 212, 0.08);
   --text: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.6);
   --text-tertiary: rgba(255, 255, 255, 0.35);
@@ -79,6 +81,7 @@ img { display: block; max-width: 100%; }
   letter-spacing: 0.5px;
 }
 .nav-link:hover { color: var(--accent); }
+.nav-link.active { color: var(--accent); }
 
 /* Hero Section */
 .hero {
@@ -133,7 +136,7 @@ img { display: block; max-width: 100%; }
 .hero-subtitle {
   font-size: clamp(15px, 2vw, 20px);
   color: var(--text-secondary);
-  max-width: 640px;
+  max-width: 680px;
   margin-bottom: 48px;
   line-height: 1.7;
   opacity: 0;
@@ -176,7 +179,6 @@ img { display: block; max-width: 100%; }
   animation: scrollLine 2s ease-in-out infinite;
 }
 
-/* Tags */
 .tags {
   display: flex; gap: 12px; flex-wrap: wrap;
   justify-content: center; margin-top: 32px;
@@ -228,19 +230,203 @@ img { display: block; max-width: 100%; }
 .section-desc {
   font-size: 16px;
   color: var(--text-secondary);
-  max-width: 640px;
+  max-width: 680px;
   margin: 0 auto;
   line-height: 1.8;
 }
 
-/* Overview Cards */
-.overview-grid {
+/* Three-Layer Architecture */
+.layer-stack {
+  display: flex; flex-direction: column;
+  gap: 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.layer-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px 40px;
+  position: relative;
+  transition: all 0.4s var(--ease-out-expo);
+  margin-bottom: -1px;
+  border-radius-bottom: 0;
+}
+.layer-card:first-child { border-radius: 16px 16px 0 0; }
+.layer-card:last-child { border-radius: 0 0 16px 16px; margin-bottom: 0; }
+
+.layer-card:hover {
+  border-color: rgba(255, 95, 15, 0.3);
+  z-index: 1;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+.layer-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 16px;
+}
+
+.layer-badge {
+  font-size: 11px; font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 100px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.layer-badge.l0 { background: var(--accent-soft); color: var(--accent); }
+.layer-badge.l1 { background: var(--cyan-soft); color: var(--cyan); }
+.layer-badge.l2 { background: rgba(255,255,255,0.06); color: var(--text-secondary); }
+
+.layer-title {
+  font-size: 20px; font-weight: 700;
+}
+
+.layer-desc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+
+.layer-detail {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  line-height: 1.8;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.layer-detail code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Flow Steps */
+.flow-container {
+  display: flex; flex-direction: column;
+  gap: 12px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.flow-step {
+  display: flex; align-items: flex-start; gap: 20px;
+  padding: 24px 28px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.3s var(--ease-out-expo);
+}
+.flow-step:hover {
+  border-color: rgba(255, 95, 15, 0.2);
+  transform: translateX(8px);
+}
+
+.flow-num {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 900;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.flow-content h4 {
+  font-size: 15px; font-weight: 700;
+  margin-bottom: 4px;
+}
+.flow-content p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Module Grid */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.module-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  transition: all 0.3s var(--ease-out-expo);
+  display: flex; align-items: center; gap: 12px;
+}
+.module-item:hover {
+  border-color: rgba(255, 95, 15, 0.3);
+  background: var(--bg-elevated);
+  transform: translateY(-2px);
+}
+
+.module-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+.module-item:hover .module-dot { opacity: 1; }
+
+.module-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Pain Point Cards */
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.pain-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-out-expo);
+}
+.pain-card:hover {
+  border-color: rgba(255, 95, 15, 0.2);
+  transform: translateY(-4px);
+}
+
+.pain-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+.pain-card h3 {
+  font-size: 17px; font-weight: 700;
+  margin-bottom: 8px;
+}
+.pain-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* Capability Cards */
+.capability-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px;
 }
 
-.overview-card {
+.capability-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -249,7 +435,7 @@ img { display: block; max-width: 100%; }
   position: relative;
   overflow: hidden;
 }
-.overview-card::before {
+.capability-card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0;
   height: 2px;
@@ -257,28 +443,29 @@ img { display: block; max-width: 100%; }
   opacity: 0;
   transition: opacity 0.4s;
 }
-.overview-card:hover {
+.capability-card:hover {
   border-color: rgba(255, 95, 15, 0.3);
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
-.overview-card:hover::before { opacity: 1; }
+.capability-card:hover::before { opacity: 1; }
 
-.overview-icon {
+.capability-icon {
   width: 48px; height: 48px;
   border-radius: 12px;
   background: var(--accent-soft);
   display: flex; align-items: center; justify-content: center;
   margin-bottom: 20px;
-  font-size: 22px; font-weight: 900;
+  font-size: 13px; font-weight: 900;
   color: var(--accent);
+  letter-spacing: 1px;
 }
 
-.overview-card h3 {
+.capability-card h3 {
   font-size: 18px; font-weight: 700;
   margin-bottom: 8px;
 }
-.overview-card p {
+.capability-card p {
   font-size: 14px;
   color: var(--text-secondary);
   line-height: 1.7;
@@ -428,9 +615,10 @@ footer {
   .section { padding: 60px 20px; }
   .gallery { gap: 48px; }
   .gallery-item-header { padding: 16px 20px; }
+  .layer-card { padding: 24px; }
+  .flow-step { padding: 16px; gap: 12px; }
 }
 
-/* Animations */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
@@ -450,12 +638,15 @@ footer {
 <nav class="nav" id="nav">
   <div class="nav-brand">
     <span class="nav-brand-dot"></span>
-    点评商户详情页 Skill
+    dpdesign-spec-context
   </div>
   <div class="nav-links">
-    <a href="#overview" class="nav-link">项目概述</a>
+    <a href="#pain" class="nav-link">背景痛点</a>
+    <a href="#solution" class="nav-link">方案</a>
+    <a href="#modules" class="nav-link">模块覆盖</a>
+    <a href="#flow" class="nav-link">执行流程</a>
+    <a href="#capability" class="nav-link">可复用能力</a>
     <a href="#gallery" class="nav-link">设计稿</a>
-    <a href="#about" class="nav-link">关于</a>
   </div>
 </nav>
 
@@ -463,32 +654,37 @@ footer {
 <section class="hero" id="hero">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
-  <div class="hero-tag">AI CODING · DESIGN SYSTEM</div>
+  <div class="hero-tag">AI CODING · DESIGN SPECIFICATION</div>
   <h1 class="hero-title">
-    点评商户详情页 <span class="accent">Skill</span>
+    点评 AI 生码<span class="accent">设计规范</span>上下文
   </h1>
   <p class="hero-subtitle">
-    围绕实体门店提供"感知→决策→转化"动线的消费型详情页，覆盖美食、景点两类业态。提取色彩基调、圆角体系、边距体系等设计规范，形成可复用的页面骨架 Skill。
+    不是查参数的工具，而是必须严格执行的生码流程。通过三层资产体系——代码组件路由、模块布局策略、组件视觉规范——让 AI 知道「是否该直接调代码」+「模块内部怎么排」+「每个控件视觉参数」，实现设计到代码的高效协作。
   </p>
   <div class="tags">
-    <span class="tag">设计规范</span>
-    <span class="tag">页面骨架</span>
-    <span class="tag">多业态</span>
-    <span class="tag">AI 辅助</span>
-    <span class="tag">Skill</span>
+    <span class="tag">三层资产</span>
+    <span class="tag">代码组件复用</span>
+    <span class="tag">模块布局策略</span>
+    <span class="tag">视觉规范</span>
+    <span class="tag">按需加载</span>
+    <span class="tag">强制流程</span>
   </div>
   <div class="hero-metrics">
     <div class="hero-metric">
-      <div class="hero-metric-num">880+</div>
-      <div class="hero-metric-label">行规范</div>
+      <div class="hero-metric-num">3</div>
+      <div class="hero-metric-label">层资产体系</div>
     </div>
     <div class="hero-metric">
-      <div class="hero-metric-num">50+</div>
-      <div class="hero-metric-label">组件规则</div>
+      <div class="hero-metric-num">17</div>
+      <div class="hero-metric-label">模块布局策略</div>
     </div>
     <div class="hero-metric">
-      <div class="hero-metric-num">2</div>
-      <div class="hero-metric-label">类业态覆盖</div>
+      <div class="hero-metric-num">89</div>
+      <div class="hero-metric-label">d2c 代码组件</div>
+    </div>
+    <div class="hero-metric">
+      <div class="hero-metric-num">7</div>
+      <div class="hero-metric-label">步执行流程</div>
     </div>
   </div>
   <div class="hero-scroll">
@@ -497,46 +693,227 @@ footer {
   </div>
 </section>
 
-<!-- Overview -->
-<section class="section" id="overview">
+<!-- 背景痛点 -->
+<section class="section" id="pain">
   <div class="section-header reveal">
-    <div class="section-num">01 / OVERVIEW</div>
-    <h2 class="section-title">项目概述</h2>
+    <div class="section-num">01 / PAIN POINTS</div>
+    <h2 class="section-title">背景痛点</h2>
     <p class="section-desc">
-      通过 AI 辅助设计规范提取与页面骨架标准化，将设计系统的核心要素转化为可复用的 Skill，实现设计到代码的高效协作。
+      AI 生码过程中，设计规范分散、组件复用率低、视觉一致性难以保障，是设计研发协作的核心瓶颈。
     </p>
   </div>
-  <div class="overview-grid">
-    <div class="overview-card reveal">
-      <div class="overview-icon">01</div>
-      <h3>感知层规范</h3>
-      <p>提取色彩基调、字体层级、图标体系等视觉感知要素，建立统一的设计语言基础。</p>
+  <div class="pain-grid">
+    <div class="pain-card reveal">
+      <div class="pain-icon">⚠️</div>
+      <h3>规范分散，AI 无从遵循</h3>
+      <p>色彩、字号、圆角、间距等视觉规范散落在多个文档中，AI 生码时缺乏统一的上下文来源，容易"经验补全"或"审美优化"，产出的代码无法追溯参数来源。</p>
     </div>
-    <div class="overview-card reveal">
-      <div class="overview-icon">02</div>
-      <h3>决策层骨架</h3>
-      <p>定义圆角体系、边距体系、间距规则等结构性规范，形成页面骨架的标准模板。</p>
+    <div class="pain-card reveal">
+      <div class="pain-icon">🔄</div>
+      <h3>复杂组件重复手写</h3>
+      <p>瓷片区、货架模块、评价卡片等复杂状态组件已有高保真代码实现，但 AI 不知道组件存在，每次都从零手写 CSS/HTML 模拟，效率低且难以覆盖全部状态。</p>
     </div>
-    <div class="overview-card reveal">
-      <div class="overview-icon">03</div>
-      <h3>转化层组件</h3>
-      <p>沉淀 50+ 组件规则，覆盖美食、景点两类业态，支撑"感知→决策→转化"完整动线。</p>
+    <div class="pain-card reveal">
+      <div class="pain-icon">📐</div>
+      <h3>模块排版缺乏策略</h3>
+      <p>同一模块（如商品卡片、店铺卡片）在不同场景下有不同布局模式和状态路由，缺乏统一的「场景→状态→布局」决策路径，导致排版不一致。</p>
     </div>
-    <div class="overview-card reveal">
-      <div class="overview-icon">04</div>
-      <h3>Skill 化输出</h3>
-      <p>将设计规范转化为 880+ 行可执行 Skill，实现设计规范的代码化、自动化、可复用。</p>
+    <div class="pain-card reveal">
+      <div class="pain-icon">🔍</div>
+      <h3>规范加载低效</h3>
+      <p>一次性加载全部规范文档导致上下文爆炸，而按需加载又缺乏索引和路由机制，AI 难以快速定位到真正需要的模块和组件规范。</p>
     </div>
   </div>
 </section>
 
-<!-- Gallery -->
+<!-- 方案：三层资产体系 -->
+<section class="section" id="solution">
+  <div class="section-header reveal">
+    <div class="section-num">02 / SOLUTION</div>
+    <h2 class="section-title">三层资产体系</h2>
+    <p class="section-desc">
+      三层规范配合 = AI 知道「是否该直接调代码」+「模块内部怎么排」+「每个控件视觉参数」。每一层按需加载，绝不一股脑全读。
+    </p>
+  </div>
+  <div class="layer-stack">
+    <div class="layer-card reveal">
+      <div class="layer-header">
+        <span class="layer-badge l0">Layer 0 · CODE</span>
+        <span class="layer-title">代码组件路由</span>
+      </div>
+      <p class="layer-desc">管「是否已有高保真代码实现」。复杂状态组件优先复用 bundled 代码，模块文档负责场景→状态路由，代码契约负责 props / 构建 / 导出。</p>
+      <div class="layer-detail">
+        规范文件：<code>references/component-source-registry.md</code>、<code>references/code-components/*.md</code><br>
+        覆盖组件：瓷片区 / Tile（本地源码）、d2c-components（89 个组件，npm 按需安装）
+      </div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-header">
+        <span class="layer-badge l1">Layer 1 · MODULE</span>
+        <span class="layer-title">模块布局策略</span>
+      </div>
+      <p class="layer-desc">管「模块内部怎么排版 / 怎么选状态」。模块内部布局模式、信息优先级、适配差异；对代码组件型模块，负责场景→状态→代码调用路由。</p>
+      <div class="layer-detail">
+        规范文件：<code>references/specs/module/module-*.md</code><br>
+        覆盖模块：17 个模块布局策略，含瓷片区、商品卡片、店铺卡片、货架模块、评价卡片等
+      </div>
+    </div>
+    <div class="layer-card reveal">
+      <div class="layer-header">
+        <span class="layer-badge l2">Layer 2 · COMPONENT</span>
+        <span class="layer-title">组件视觉规范</span>
+      </div>
+      <p class="layer-desc">管「细节长什么样」。颜色、字号、圆角、间距、阴影、组件尺寸与状态——每个控件都有精确的视觉参数值。</p>
+      <div class="layer-detail">
+        规范文件：<code>references/specs/component/component-*.md</code><br>
+        覆盖组件：色彩、文字、容器、按钮、图片容器、标签、货币、星级、红点、浮层等
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 模块覆盖 -->
+<section class="section" id="modules">
+  <div class="section-header reveal">
+    <div class="section-num">03 / MODULE COVERAGE</div>
+    <h2 class="section-title">模块布局策略覆盖</h2>
+    <p class="section-desc">
+      17 个模块布局策略，覆盖点评商户详情页核心场景。只加载用户需求中涉及的模块，不确定时先读布局策略总览和高频场景索引。
+    </p>
+  </div>
+  <div class="module-grid reveal">
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">瓷片区</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">商品卡片</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">店铺卡片</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">运营位卡片</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">商户信息卡</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">价格交易卡</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">套餐详情卡</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">评价卡片</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">种草笔记卡片</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">货架模块</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">金刚区入口</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">头图区</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">底部操作栏</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">普通信息卡</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">日期时间选择</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">内容流卡片</span></div>
+    <div class="module-item"><span class="module-dot"></span><span class="module-name">相关内容卡片</span></div>
+  </div>
+</section>
+
+<!-- 执行流程 -->
+<section class="section" id="flow">
+  <div class="section-header reveal">
+    <div class="section-num">04 / EXECUTION FLOW</div>
+    <h2 class="section-title">执行流程</h2>
+    <p class="section-desc">
+      从环境检查到代码生成再到评审，7 步强制流程确保每一步都有据可查、参数可追溯。
+    </p>
+  </div>
+  <div class="flow-container">
+    <div class="flow-step reveal">
+      <div class="flow-num">0</div>
+      <div class="flow-content">
+        <h4>判断是否触发底图直出</h4>
+        <p>每次调用优先执行。若用户只想获取完整页面 HTML 底图且无修改意图，走快捷路径原样输出；否则进入 Step 1。</p>
+      </div>
+    </div>
+    <div class="flow-step reveal">
+      <div class="flow-num">1</div>
+      <div class="flow-content">
+        <h4>检查并准备运行环境</h4>
+        <p>检查 pnpm 可用性、@picasso/d2c-components 是否已安装且为最新版、样式入口是否已引入。未通过则执行修复，不得跳过。</p>
+      </div>
+    </div>
+    <div class="flow-step reveal">
+      <div class="flow-num">2</div>
+      <div class="flow-content">
+        <h4>判断是否命中代码组件</h4>
+        <p>读取 component-source-registry.md，根据用户需求关键词判断是否命中已有代码组件。命中则优先复用，禁止手写替代。</p>
+      </div>
+    </div>
+    <div class="flow-step reveal">
+      <div class="flow-num">3</div>
+      <div class="flow-content">
+        <h4>按需加载模块布局策略</h4>
+        <p>分析需求涉及哪些模块，查模块表只加载命中的模块规范。不确定时先读布局策略总览或高频场景索引。</p>
+      </div>
+    </div>
+    <div class="flow-step reveal">
+      <div class="flow-num">4</div>
+      <div class="flow-content">
+        <h4>按需加载组件视觉规范</h4>
+        <p>根据功能推断涉及哪些组件的视觉细节，查 INDEX.md 推断速查表，只加载命中的组件规范，获取精确视觉参数。</p>
+      </div>
+    </div>
+    <div class="flow-step reveal">
+      <div class="flow-num">5</div>
+      <div class="flow-content">
+        <h4>输出视觉规范上下文文档</h4>
+        <p>将 Step 2~4 命中的规范合并为结构化的「施工图纸」，具体到模块、状态、信息元素、字体、颜色、间距、圆角等参数。</p>
+      </div>
+    </div>
+    <div class="flow-step reveal">
+      <div class="flow-num">6</div>
+      <div class="flow-content">
+        <h4>生成代码 + 检查评审</h4>
+        <p>基于上下文文档生成代码，仅可使用命中规范中明确出现的参数，禁止经验补全。生成后执行编码约束检查与视觉设计评审，输出自查报告。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 可复用能力 -->
+<section class="section" id="capability">
+  <div class="section-header reveal">
+    <div class="section-num">05 / REUSABLE CAPABILITY</div>
+    <h2 class="section-title">可复用的能力</h2>
+    <p class="section-desc">
+      Skill 将设计规范沉淀为可复用的代码资产和决策路径，支撑多业态、多场景的页面快速生成。
+    </p>
+  </div>
+  <div class="capability-grid">
+    <div class="capability-card reveal">
+      <div class="capability-icon">CODE</div>
+      <h3>代码组件复用</h3>
+      <p>89 个 d2c-components（列表项、筛选、导航、底部弹层、优惠券、FAB、评分等）+ 本地瓷片区 TileCard 源码，命中即调，禁止重画。</p>
+    </div>
+    <div class="capability-card reveal">
+      <div class="capability-icon">MOD</div>
+      <h3>模块状态路由</h3>
+      <p>每个模块提供「场景→状态→布局/代码调用」决策路径。如瓷片区根据业态选择 single_supply / multi_supply 状态，货架模块区分到店套餐与超值券变体。</p>
+    </div>
+    <div class="capability-card reveal">
+      <div class="capability-icon">VIS</div>
+      <h3>视觉参数可追溯</h3>
+      <p>每个颜色、字号、圆角、间距都有精确 Token 值和来源文件。生码结果可追溯，自查报告中标明关键参数的规范文件和参数项。</p>
+    </div>
+    <div class="capability-card reveal">
+      <div class="capability-icon">IDX</div>
+      <h3>按需索引加载</h3>
+      <p>三层按需加载机制：先确认用户诉求，再判断是否命中代码组件，只加载真正需要的模块、组件和代码契约文件，避免上下文爆炸。</p>
+    </div>
+    <div class="capability-card reveal">
+      <div class="capability-icon">CHK</div>
+      <h3>强制检查与评审</h3>
+      <p>生码后必须执行编码约束检查（规范执行、代码组件、可选项、图标、价格、自适应）和视觉设计评审（排版、视觉细节、一致性、手机适配）。</p>
+    </div>
+    <div class="capability-card reveal">
+      <div class="capability-icon">EXT</div>
+      <h3>可扩展架构</h3>
+      <p>新增模块或组件时，在 INDEX.md、component-source-registry.md 和相关 mapping 文件中补充触发词与说明即可，无需修改流程逻辑。</p>
+    </div>
+  </div>
+</section>
+
+<!-- 设计稿展示 -->
 <section class="section" id="gallery">
   <div class="section-header reveal">
-    <div class="section-num">02 / DESIGN GALLERY</div>
+    <div class="section-num">06 / DESIGN GALLERY</div>
     <h2 class="section-title">设计稿展示</h2>
     <p class="section-desc">
-      以下为 Figma 设计稿完整展示，点击图片可查看高清大图。
+      以下为 Figma 设计稿完整展示，依次为封面通览、背景痛点、方案设计、可复用能力。点击图片可查看高清大图。
     </p>
   </div>
   <div class="gallery">
@@ -544,87 +921,59 @@ footer {
       <div class="gallery-item-header">
         <div style="display:flex;align-items:center;gap:16px;">
           <span class="gallery-item-num">01</span>
-          <span class="gallery-item-title">设计总览</span>
+          <span class="gallery-item-title">封面通览</span>
         </div>
         <span class="gallery-item-zoom">点击放大 ⤢</span>
       </div>
       <div class="gallery-image-wrap" data-img="images/1.png">
-        <img src="images/1.png" alt="点评商户详情页 Skill - 设计总览" loading="lazy" />
+        <img src="images/1.png" alt="封面通览" loading="lazy" />
       </div>
     </div>
     <div class="gallery-item reveal">
       <div class="gallery-item-header">
         <div style="display:flex;align-items:center;gap:16px;">
           <span class="gallery-item-num">02</span>
-          <span class="gallery-item-title">规范体系</span>
+          <span class="gallery-item-title">背景痛点</span>
         </div>
         <span class="gallery-item-zoom">点击放大 ⤢</span>
       </div>
       <div class="gallery-image-wrap" data-img="images/2.png">
-        <img src="images/2.png" alt="点评商户详情页 Skill - 规范体系" loading="lazy" />
+        <img src="images/2.png" alt="背景痛点" loading="lazy" />
       </div>
     </div>
     <div class="gallery-item reveal">
       <div class="gallery-item-header">
         <div style="display:flex;align-items:center;gap:16px;">
           <span class="gallery-item-num">03</span>
-          <span class="gallery-item-title">完整规范文档</span>
+          <span class="gallery-item-title">方案</span>
         </div>
         <span class="gallery-item-zoom">点击放大 ⤢</span>
       </div>
       <div class="gallery-image-wrap" data-img="images/3.png">
-        <img src="images/3.png" alt="点评商户详情页 Skill - 完整规范文档" loading="lazy" />
+        <img src="images/3.png" alt="方案" loading="lazy" />
       </div>
     </div>
     <div class="gallery-item reveal">
       <div class="gallery-item-header">
         <div style="display:flex;align-items:center;gap:16px;">
           <span class="gallery-item-num">04</span>
-          <span class="gallery-item-title">业态覆盖</span>
+          <span class="gallery-item-title">可复用的能力</span>
         </div>
         <span class="gallery-item-zoom">点击放大 ⤢</span>
       </div>
       <div class="gallery-image-wrap" data-img="images/4.png">
-        <img src="images/4.png" alt="点评商户详情页 Skill - 业态覆盖" loading="lazy" />
+        <img src="images/4.png" alt="可复用的能力" loading="lazy" />
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- About -->
-<section class="section" id="about">
-  <div class="section-header reveal">
-    <div class="section-num">03 / ABOUT</div>
-    <h2 class="section-title">关于项目</h2>
-    <p class="section-desc">
-      这是 AI Coding 实践的一部分，探索设计规范提取与页面骨架标准化的自动化路径。
-    </p>
-  </div>
-  <div class="overview-grid">
-    <div class="overview-card reveal">
-      <div class="overview-icon">AI</div>
-      <h3>AI 辅助提取</h3>
-      <p>利用 CatDesk AI 全局搜索与语义分析能力，从现有页面中自动提取设计规范要素。</p>
-    </div>
-    <div class="overview-card reveal">
-      <div class="overview-icon">SK</div>
-      <h3>Skill 化封装</h3>
-      <p>将提取的规范封装为可执行 Skill，支持设计稿到代码的自动化转换流程。</p>
-    </div>
-    <div class="overview-card reveal">
-      <div class="overview-icon">CO</div>
-      <h3>协作提效</h3>
-      <p>通过标准化页面骨架，降低设计与研发的沟通成本，提升多业态页面的产出效率。</p>
     </div>
   </div>
 </section>
 
 <!-- Footer -->
 <footer>
-  <p class="footer-brand">任悦平 · 点评商户详情页 Skill</p>
+  <p class="footer-brand">dpdesign-spec-context · 点评 AI 生码设计规范</p>
   <p class="footer-text">
     © 2026 All Rights Reserved · 
-    <a href="https://github.com/phuryn/pm-skills" class="footer-link" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/waiwaipipi11-wai/dianping-skill-showcase" class="footer-link" target="_blank" rel="noopener">GitHub</a>
   </p>
 </footer>
 
@@ -638,6 +987,8 @@ footer {
 // Scroll Progress
 const scrollProgress = document.getElementById('scrollProgress');
 const nav = document.getElementById('nav');
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
 
 window.addEventListener('scroll', () => {
   const scrollTop = window.pageYOffset;
@@ -650,13 +1001,26 @@ window.addEventListener('scroll', () => {
   } else {
     nav.classList.remove('scrolled');
   }
+
+  // Active nav link
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 120;
+    if (scrollTop >= top) current = section.id;
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
 });
 
 // Reveal Animation
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry, index) => {
     if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), index * 80);
+      setTimeout(() => entry.target.classList.add('visible'), index * 60);
       observer.unobserve(entry.target);
     }
   });
